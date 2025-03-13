@@ -1,11 +1,33 @@
 import pygame
 import groups
 import os
+import sys
 import shelve
 import wave
+import pathlib
 import numpy as np
 
+# The main directory where the necessary game files are stored
 main_dir = os.path.split(os.path.abspath(__file__))[0]
+
+# Used to get the folder of the saved game data
+def get_savedir() -> pathlib.Path:
+
+    home = pathlib.Path.home()
+
+    if sys.platform == "win32":
+        return home / "AppData/Roaming"
+    elif sys.platform == "linux":
+        return home / ".local/share"
+    elif sys.platform == "darwin":
+        return home / "Library/Application Support"
+
+score_dir = get_savedir() / "Cannon-Bomb"
+try:
+    score_dir.mkdir(parents=True)
+except FileExistsError:
+    pass
+
 scoreid = 0
 
 if pygame.mixer and not pygame.mixer.get_init():
@@ -114,8 +136,7 @@ class DispLogo(pygame.sprite.Sprite):
 
         self.font = pygame.font.SysFont("Consolas", 24)
         self.color = (255,255,0)
-        #self.text = self.font.render("PRESENTS", 1, self.color)
-        self.text = self.font.render(os.getenv('APPDATA'), 1, self.color)
+        self.text = self.font.render("PRESENTS", 1, self.color)
         self.textRect = self.text.get_rect(center=(320,384))
 
 
@@ -181,7 +202,7 @@ class HighScore(pygame.sprite.Sprite):
         self._layer = 5
         pygame.sprite.Sprite.__init__(self, groups.layers)
 
-        self.d = shelve.open(os.path.join(main_dir, "score"))
+        self.d = shelve.open(os.path.join(score_dir, "score"))
         self.highscores = [200000,180000,170000,160000,150000,140000,130000,120000,110000,100000]
         self.topscore = 200000
         # self.names = ["   ","   ","   ","   ","   ","   ","   ","   ","   ","   "]
@@ -202,13 +223,13 @@ class HighScore(pygame.sprite.Sprite):
     
     def newHScore(self, score):
         self.topscore = score
-        self.d = shelve.open(os.path.join(main_dir, "score"))
+        self.d = shelve.open(os.path.join(score_dir, "score"))
         self.d['score'] = self.topscore
         self.d.close()
 
     def newName(self, place, nName):
         self.names[place] = nName
-        self.d = shelve.open(os.path.join(main_dir, "score"))
+        self.d = shelve.open(os.path.join(score_dir, "score"))
         self.d['scores'] = self.highscores
         self.d['name'] = self.names
         self.d.close()
