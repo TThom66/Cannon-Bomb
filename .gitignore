@@ -2,3 +2,6 @@ score
 score.bak
 score.dat
 score.dir
+__pycache__/control.cpython-312.pyc
+__pycache__/groups.cpython-312.pyc
+__pycache__/objects.cpython-312.pyc
