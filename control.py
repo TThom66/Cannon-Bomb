@@ -114,7 +114,8 @@ class DispLogo(pygame.sprite.Sprite):
 
         self.font = pygame.font.SysFont("Consolas", 24)
         self.color = (255,255,0)
-        self.text = self.font.render("PRESENTS", 1, self.color)
+        #self.text = self.font.render("PRESENTS", 1, self.color)
+        self.text = self.font.render(os.getenv('APPDATA'), 1, self.color)
         self.textRect = self.text.get_rect(center=(320,384))
 
 
