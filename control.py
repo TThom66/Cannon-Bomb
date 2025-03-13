@@ -277,7 +277,7 @@ class StartText(pygame.sprite.Sprite):
         self._layer = 5
         pygame.sprite.Sprite.__init__(self, groups.layers)
 
-        self.font = pygame.font.SysFont("Consolas", 24)
+        self.font = pygame.font.SysFont("Consolas", 20)
         self.color = (255,0,0)
         self.text = self.font.render("PRESS ENTER TO PLAY", 1, self.color)
 
